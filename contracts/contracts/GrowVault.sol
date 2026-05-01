@@ -24,6 +24,18 @@ contract GrowVault is Ownable, ReentrancyGuard {
         uint8 milestonesClaimed;
     }
 
+    uint256 public constant SOFT_LOCK_PENALTY_BPS = 500;
+    uint256 public constant BPS_DENOMINATOR = 10000;
+
+    uint256 private _goalCounter;
+
+    mapping(uint256 => Goal) public goals;
+    mapping(address => uint256[]) public userGoals;
+    mapping(uint256 => mapping(address => uint256)) public contributions;
+    mapping(uint256 => address[]) public contributors;
+
+    uint256 public penaltyPool;
+
     constructor(address _cUSD) Ownable(msg.sender) {
         cUSD = IERC20(_cUSD);
     }
