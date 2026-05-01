@@ -8,6 +8,22 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 contract GrowVault is Ownable, ReentrancyGuard {
     IERC20 public immutable cUSD;
 
+    enum LockMode { SOFT, HARD }
+
+    struct Goal {
+        address owner;
+        string name;
+        string emoji;
+        uint256 targetAmount;
+        uint256 savedAmount;
+        uint256 deadline;
+        LockMode lockMode;
+        bool completed;
+        bool withdrawn;
+        uint256 createdAt;
+        uint8 milestonesClaimed;
+    }
+
     constructor(address _cUSD) Ownable(msg.sender) {
         cUSD = IERC20(_cUSD);
     }
