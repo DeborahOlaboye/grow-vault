@@ -90,6 +90,11 @@ contract GrowVault is Ownable, ReentrancyGuard {
         contributions[goalId][msg.sender] += amount;
         goal.savedAmount += amount;
 
+        if (goal.savedAmount >= goal.targetAmount) {
+            goal.completed = true;
+            emit GoalCompleted(goalId);
+        }
+
         emit Deposited(goalId, msg.sender, amount);
     }
 }
