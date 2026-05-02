@@ -45,4 +45,34 @@ contract GrowVault is Ownable, ReentrancyGuard {
     constructor(address _cUSD) Ownable(msg.sender) {
         cUSD = IERC20(_cUSD);
     }
+
+    function createGoal(
+        string calldata name,
+        string calldata emoji,
+        uint256 targetAmount,
+        uint256 deadline,
+        LockMode lockMode
+    ) external returns (uint256 goalId) {
+        require(bytes(name).length > 0, "Name required");
+        require(targetAmount > 0, "Target required");
+        require(deadline > block.timestamp, "Invalid deadline");
+
+        goalId = _goalCounter++;
+        goals[goalId] = Goal({
+            owner: msg.sender,
+            name: name,
+            emoji: emoji,
+            targetAmount: targetAmount,
+            savedAmount: 0,
+            deadline: deadline,
+            lockMode: lockMode,
+            completed: false,
+            withdrawn: false,
+            createdAt: block.timestamp,
+            milestonesClaimed: 0
+        });
+
+        userGoals[msg.sender].push(goalId);
+        emit GoalCreated(goalId, msg.sender, name, targetAmount, deadline);
+    }
 }
