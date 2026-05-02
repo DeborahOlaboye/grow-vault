@@ -76,3 +76,20 @@ contract GrowVault is Ownable, ReentrancyGuard {
         emit GoalCreated(goalId, msg.sender, name, targetAmount, deadline);
     }
 }
+    function deposit(uint256 goalId, uint256 amount) external nonReentrant {
+        Goal storage goal = goals[goalId];
+        require(!goal.withdrawn, "Goal closed");
+        require(!goal.completed, "Goal already completed");
+        require(amount > 0, "Amount required");
+
+        require(cUSD.transferFrom(msg.sender, address(this), amount), "Transfer failed");
+
+        if (contributions[goalId][msg.sender] == 0) {
+            contributors[goalId].push(msg.sender);
+        }
+        contributions[goalId][msg.sender] += amount;
+        goal.savedAmount += amount;
+
+        emit Deposited(goalId, msg.sender, amount);
+    }
+}
