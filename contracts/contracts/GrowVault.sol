@@ -104,6 +104,14 @@ contract GrowVault is Ownable, ReentrancyGuard {
         require(!goal.withdrawn, "Already withdrawn");
         require(goal.savedAmount > 0, "Nothing saved");
 
+        // Hard lock: can only withdraw after deadline or if goal is completed
+        if (goal.lockMode == LockMode.HARD) {
+            require(
+                block.timestamp >= goal.deadline || goal.completed,
+                "Hard locked until deadline"
+            );
+        }
+
         goal.withdrawn = true;
         uint256 amount = goal.savedAmount;
         uint256 penalty = 0;
