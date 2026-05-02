@@ -106,8 +106,19 @@ contract GrowVault is Ownable, ReentrancyGuard {
 
         goal.withdrawn = true;
         uint256 amount = goal.savedAmount;
+        uint256 penalty = 0;
+
+        if (
+            goal.lockMode == LockMode.SOFT &&
+            !goal.completed &&
+            block.timestamp < goal.deadline
+        ) {
+            penalty = (amount * SOFT_LOCK_PENALTY_BPS) / BPS_DENOMINATOR;
+            penaltyPool += penalty;
+            amount -= penalty;
+        }
 
         require(cUSD.transfer(msg.sender, amount), "Transfer failed");
-        emit Withdrawn(goalId, msg.sender, amount, 0);
+        emit Withdrawn(goalId, msg.sender, amount, penalty);
     }
 }
