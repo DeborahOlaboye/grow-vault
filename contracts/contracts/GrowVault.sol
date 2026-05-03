@@ -150,3 +150,14 @@ contract GrowVault is Ownable, ReentrancyGuard {
         return userGoals[user];
     }
 }
+    function getContributors(uint256 goalId) external view returns (address[] memory) {
+        return contributors[goalId];
+    }
+
+    function getProgress(uint256 goalId) external view returns (uint256 pct) {
+        Goal storage goal = goals[goalId];
+        if (goal.targetAmount == 0) return 0;
+        pct = (goal.savedAmount * 100) / goal.targetAmount;
+        if (pct > 100) pct = 100;
+    }
+}
