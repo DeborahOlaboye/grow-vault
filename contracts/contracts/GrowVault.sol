@@ -146,3 +146,7 @@ contract GrowVault is Ownable, ReentrancyGuard {
         emit MilestoneClaimed(goalId, nextMilestone);
     }
 }
+    function getUserGoals(address user) external view returns (uint256[] memory) {
+        return userGoals[user];
+    }
+}
