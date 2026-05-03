@@ -161,3 +161,9 @@ contract GrowVault is Ownable, ReentrancyGuard {
         if (pct > 100) pct = 100;
     }
 }
+    function withdrawPenalties() external onlyOwner {
+        uint256 amount = penaltyPool;
+        penaltyPool = 0;
+        require(cUSD.transfer(owner(), amount), "Transfer failed");
+    }
+}
