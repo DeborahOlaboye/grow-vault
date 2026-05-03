@@ -130,3 +130,19 @@ contract GrowVault is Ownable, ReentrancyGuard {
         emit Withdrawn(goalId, msg.sender, amount, penalty);
     }
 }
+    function claimMilestone(uint256 goalId) external {
+        Goal storage goal = goals[goalId];
+        require(goal.owner == msg.sender, "Not owner");
+
+        uint256 pct = (goal.savedAmount * 100) / goal.targetAmount;
+        uint8 nextMilestone = goal.milestonesClaimed + 1;
+
+        // milestones: 1=25%, 2=50%, 3=75%, 4=100%
+        uint8 threshold = nextMilestone * 25;
+        require(pct >= threshold, "Milestone not reached");
+        require(nextMilestone <= 4, "All milestones claimed");
+
+        goal.milestonesClaimed = nextMilestone;
+        emit MilestoneClaimed(goalId, nextMilestone);
+    }
+}
