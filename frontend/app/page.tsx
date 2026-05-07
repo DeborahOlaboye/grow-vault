@@ -1,6 +1,9 @@
 "use client";
+
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import GoalsList from "@/components/GoalsList";
+import CreateGoal from "@/components/CreateGoal";
 
 type Tab = "goals" | "new";
 
@@ -36,6 +39,9 @@ export default function Home() {
           </button>
         ))}
       </nav>
+
+      {activeTab === "goals" && <GoalsList />}
+      {activeTab === "new" && <CreateGoal onCreated={() => setActiveTab("goals")} />}
     </div>
   );
 }
