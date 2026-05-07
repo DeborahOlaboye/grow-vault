@@ -12,5 +12,12 @@ export default function Home() {
     );
   }
 
-  return <div className="min-h-screen max-w-md mx-auto px-4 pb-8">Connected</div>;
+  return (
+    <div className="min-h-screen max-w-md mx-auto px-4 pb-8">
+      <header className="pt-6 pb-4">
+        <h1 className="text-2xl font-bold text-violet-700">GrowVault</h1>
+        <p className="text-xs text-gray-400">Save towards your goals. Earn while you wait.</p>
+      </header>
+    </div>
+  );
 }
