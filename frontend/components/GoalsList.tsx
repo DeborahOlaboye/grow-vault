@@ -2,6 +2,7 @@
 
 import { useAccount, useChainId, useReadContract } from "wagmi";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI } from "@/lib/contracts";
+import GoalCard from "./GoalCard";
 
 export default function GoalsList() {
   const { address } = useAccount();
@@ -25,5 +26,11 @@ export default function GoalsList() {
     );
   }
 
-  return <div className="space-y-4">{goalIds.length} goals</div>;
+  return (
+    <div className="space-y-4">
+      {goalIds.map((id) => (
+        <GoalCard key={id.toString()} goalId={id} contractAddress={contractAddress} />
+      ))}
+    </div>
+  );
 }
