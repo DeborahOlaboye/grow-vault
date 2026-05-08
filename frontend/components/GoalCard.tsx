@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount, useReadContract } from "wagmi";
-import { formatUnits } from "viem";
-import { GROW_VAULT_ABI } from "@/lib/contracts";
+import { useAccount, useChainId, useReadContract, useWriteContract } from "wagmi";
+import { formatUnits, parseUnits } from "viem";
+import { GROW_VAULT_ABI, ERC20_ABI, CUSD_ADDRESS } from "@/lib/contracts";
+
+const MILESTONES = ["25%", "50%", "75%", "100%"];
 
 export default function GoalCard({
   goalId,
@@ -13,6 +15,9 @@ export default function GoalCard({
   contractAddress: `0x${string}`;
 }) {
   const { address } = useAccount();
+  const chainId = useChainId() as 42220 | 44787;
+  const cUSD = CUSD_ADDRESS[chainId] as `0x${string}`;
+  const [depositAmount, setDepositAmount] = useState("");
   const [expanded, setExpanded] = useState(false);
 
   const { data: goal } = useReadContract({
@@ -29,6 +34,8 @@ export default function GoalCard({
     args: [goalId],
   });
 
+  const { writeContract: approve } = useWriteContract();
+
   if (!goal) return null;
 
   const saved = Number(formatUnits(goal[4], 18)).toFixed(2);
@@ -37,6 +44,13 @@ export default function GoalCard({
   const deadline = new Date(Number(goal[5]) * 1000).toLocaleDateString();
   const lockLabel = goal[6] === 0 ? "Soft lock" : "Hard lock";
   const isOwner = goal[0].toLowerCase() === address?.toLowerCase();
+  const milestonesClaimed = Number(goal[10]);
+
+  function handleDeposit() {
+    if (!depositAmount) return;
+    const parsed = parseUnits(depositAmount, 18);
+    approve({ address: cUSD, abi: ERC20_ABI, functionName: "approve", args: [contractAddress, parsed] });
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -63,8 +77,23 @@ export default function GoalCard({
         </div>
       </button>
       {expanded && !goal[8] && (
-        <div className="border-t border-gray-100 p-4">
-          <p className="text-sm text-gray-500">Actions will go here</p>
+        <div className="border-t border-gray-100 p-4 space-y-3">
+          <div className="flex gap-2">
+            <input
+              value={depositAmount}
+              onChange={(e) => setDepositAmount(e.target.value)}
+              placeholder="Deposit amount"
+              type="number"
+              className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            />
+            <button
+              onClick={handleDeposit}
+              disabled={!depositAmount}
+              className="px-4 py-2.5 bg-violet-600 text-white rounded-xl text-sm font-medium disabled:opacity-50"
+            >
+              Deposit
+            </button>
+          </div>
         </div>
       )}
     </div>
