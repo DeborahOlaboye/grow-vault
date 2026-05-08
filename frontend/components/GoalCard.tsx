@@ -1,6 +1,7 @@
 "use client";
 
-import { useReadContract } from "wagmi";
+import { useState } from "react";
+import { useAccount, useReadContract } from "wagmi";
 import { formatUnits } from "viem";
 import { GROW_VAULT_ABI } from "@/lib/contracts";
 
@@ -11,6 +12,9 @@ export default function GoalCard({
   goalId: bigint;
   contractAddress: `0x${string}`;
 }) {
+  const { address } = useAccount();
+  const [expanded, setExpanded] = useState(false);
+
   const { data: goal } = useReadContract({
     address: contractAddress,
     abi: GROW_VAULT_ABI,
@@ -32,10 +36,11 @@ export default function GoalCard({
   const pct = Number(progress ?? 0);
   const deadline = new Date(Number(goal[5]) * 1000).toLocaleDateString();
   const lockLabel = goal[6] === 0 ? "Soft lock" : "Hard lock";
+  const isOwner = goal[0].toLowerCase() === address?.toLowerCase();
 
   return (
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-      <div className="p-4">
+      <button className="w-full p-4 text-left" onClick={() => setExpanded(!expanded)}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{goal[2]}</span>
@@ -44,7 +49,10 @@ export default function GoalCard({
               <p className="text-xs text-gray-400">{lockLabel} · Due {deadline}</p>
             </div>
           </div>
-          <p className="font-bold text-violet-700 text-sm">{pct}%</p>
+          <div className="text-right">
+            <p className="font-bold text-violet-700 text-sm">{pct}%</p>
+            {goal[7] && <span className="text-xs text-green-500">Completed!</span>}
+          </div>
         </div>
         <div className="h-2 bg-gray-100 rounded-full">
           <div className="h-2 bg-violet-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
@@ -53,7 +61,12 @@ export default function GoalCard({
           <span>{saved} cUSD saved</span>
           <span>{target} cUSD goal</span>
         </div>
-      </div>
+      </button>
+      {expanded && !goal[8] && (
+        <div className="border-t border-gray-100 p-4">
+          <p className="text-sm text-gray-500">Actions will go here</p>
+        </div>
+      )}
     </div>
   );
 }
