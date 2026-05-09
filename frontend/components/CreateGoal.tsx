@@ -12,11 +12,16 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
   const contractAddress = GROW_VAULT_ADDRESS[chainId];
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState(EMOJIS[0]);
+  const [target, setTarget] = useState("");
+  const [deadline, setDeadline] = useState("");
 
   const { writeContract, data: tx, isPending } = useWriteContract();
   const { isSuccess } = useWaitForTransactionReceipt({ hash: tx });
 
   if (isSuccess) { onCreated(); return null; }
+
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate() + 1);
 
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
@@ -24,32 +29,31 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
         <label className="block text-xs font-medium text-gray-600 mb-2">Choose an icon</label>
         <div className="flex gap-2 flex-wrap">
           {EMOJIS.map((e) => (
-            <button
-              key={e}
-              onClick={() => setEmoji(e)}
+            <button key={e} onClick={() => setEmoji(e)}
               className={`text-2xl p-2 rounded-xl border-2 transition-colors ${
                 emoji === e ? "border-violet-500 bg-violet-50" : "border-gray-100"
-              }`}
-            >
-              {e}
-            </button>
+              }`}>{e}</button>
           ))}
         </div>
       </div>
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">Goal name</label>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. School fees, New phone..."
-          className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
-        />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. School fees, New phone..."
+          className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
       </div>
-      <button
-        onClick={() => {}}
-        disabled={!name || isPending}
-        className="w-full py-3 bg-violet-600 text-white rounded-xl font-semibold disabled:opacity-50"
-      >
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">Target amount (cUSD)</label>
+        <input value={target} onChange={(e) => setTarget(e.target.value)} placeholder="0.00" type="number"
+          className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
+      </div>
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">Deadline</label>
+        <input value={deadline} onChange={(e) => setDeadline(e.target.value)} type="date"
+          min={minDate.toISOString().split("T")[0]}
+          className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
+      </div>
+      <button onClick={() => {}} disabled={!name || !target || !deadline || isPending}
+        className="w-full py-3 bg-violet-600 text-white rounded-xl font-semibold disabled:opacity-50">
         {isPending ? "Creating..." : `Create ${emoji} Goal`}
       </button>
     </div>
