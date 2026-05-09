@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount, useChainId, useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useChainId, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatUnits, parseUnits } from "viem";
 import { GROW_VAULT_ABI, ERC20_ABI, CUSD_ADDRESS } from "@/lib/contracts";
 
@@ -34,7 +34,18 @@ export default function GoalCard({
     args: [goalId],
   });
 
-  const { writeContract: approve } = useWriteContract();
+  const { writeContract: approve, data: approveTx } = useWriteContract();
+  const { writeContract: deposit, data: depositTx } = useWriteContract();
+  const { isSuccess: approveOk } = useWaitForTransactionReceipt({ hash: approveTx });
+
+  if (approveOk && depositAmount) {
+    deposit({
+      address: contractAddress,
+      abi: GROW_VAULT_ABI,
+      functionName: "deposit",
+      args: [goalId, parseUnits(depositAmount, 18)],
+    });
+  }
 
   if (!goal) return null;
 
