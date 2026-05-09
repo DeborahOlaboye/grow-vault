@@ -36,6 +36,7 @@ export default function GoalCard({
 
   const { writeContract: approve, data: approveTx } = useWriteContract();
   const { writeContract: deposit, data: depositTx } = useWriteContract();
+  const { writeContract: claimMilestone } = useWriteContract();
   const { isSuccess: approveOk } = useWaitForTransactionReceipt({ hash: approveTx });
 
   if (approveOk && depositAmount) {
@@ -56,6 +57,7 @@ export default function GoalCard({
   const lockLabel = goal[6] === 0 ? "Soft lock" : "Hard lock";
   const isOwner = goal[0].toLowerCase() === address?.toLowerCase();
   const milestonesClaimed = Number(goal[10]);
+  const nextMilestone = milestonesClaimed < 4 ? pct >= (milestonesClaimed + 1) * 25 : false;
 
   function handleDeposit() {
     if (!depositAmount) return;
@@ -87,6 +89,13 @@ export default function GoalCard({
           <span>{target} cUSD goal</span>
         </div>
       </button>
+      {milestonesClaimed > 0 && (
+        <div className="flex gap-1 px-4 pb-2">
+          {MILESTONES.slice(0, milestonesClaimed).map((m) => (
+            <span key={m} className="text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full">{m}</span>
+          ))}
+        </div>
+      )}
       {expanded && !goal[8] && (
         <div className="border-t border-gray-100 p-4 space-y-3">
           <div className="flex gap-2">
@@ -105,6 +114,14 @@ export default function GoalCard({
               Deposit
             </button>
           </div>
+          {nextMilestone && (
+            <button
+              onClick={() => claimMilestone({ address: contractAddress, abi: GROW_VAULT_ABI, functionName: "claimMilestone", args: [goalId] })}
+              className="w-full py-2 bg-violet-100 text-violet-700 rounded-xl text-sm font-medium"
+            >
+              Claim {MILESTONES[milestonesClaimed]} milestone badge!
+            </button>
+          )}
         </div>
       )}
     </div>
