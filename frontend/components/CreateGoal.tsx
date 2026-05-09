@@ -14,6 +14,7 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
   const [emoji, setEmoji] = useState(EMOJIS[0]);
   const [target, setTarget] = useState("");
   const [deadline, setDeadline] = useState("");
+  const [lockMode, setLockMode] = useState<0 | 1>(0);
 
   const { writeContract, data: tx, isPending } = useWriteContract();
   const { isSuccess } = useWaitForTransactionReceipt({ hash: tx });
@@ -51,6 +52,20 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
         <input value={deadline} onChange={(e) => setDeadline(e.target.value)} type="date"
           min={minDate.toISOString().split("T")[0]}
           className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
+      </div>
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-2">Lock type</label>
+        <div className="flex gap-2">
+          {([[0, "Soft Lock", "5% fee if withdrawn early"], [1, "Hard Lock", "Locked until deadline or goal"]] as [0|1, string, string][]).map(([val, label, desc]) => (
+            <button key={val} onClick={() => setLockMode(val)}
+              className={`flex-1 p-3 text-left rounded-xl border-2 transition-colors ${
+                lockMode === val ? "border-violet-500 bg-violet-50" : "border-gray-100"
+              }`}>
+              <p className="text-xs font-semibold text-gray-800">{label}</p>
+              <p className="text-xs text-gray-400">{desc}</p>
+            </button>
+          ))}
+        </div>
       </div>
       <button onClick={() => {}} disabled={!name || !target || !deadline || isPending}
         className="w-full py-3 bg-violet-600 text-white rounded-xl font-semibold disabled:opacity-50">
