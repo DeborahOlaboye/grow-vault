@@ -6,7 +6,7 @@ import GoalCard from "./GoalCard";
 
 export default function GoalsList() {
   const { address } = useAccount();
-  const chainId = useChainId() as 42220 | 44787;
+  const chainId = useChainId() as 42220 | 44787; // normalize to supported chain IDs
   const contractAddress = GROW_VAULT_ADDRESS[chainId];
 
   const { data: goalIds } = useReadContract({
