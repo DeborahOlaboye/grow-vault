@@ -8,3 +8,13 @@ Goal-based savings mini app for MiniPay. Set a target, deposit cUSD, earn milest
 - Social contributions — anyone can deposit to your goal by goalId
 - Milestone badges at 25%, 50%, 75%, 100% completion
 - Full withdrawal on completion
+
+## Setup
+```bash
+cd contracts && npm install
+npm run deploy:alfajores
+
+cd frontend && npm install
+# paste deployed address into lib/contracts.ts
+npm run dev
+```
