@@ -84,6 +84,15 @@ export const GROW_VAULT_ABI = [
     outputs: [{ name: "", type: "address[]" }],
   },
   {
+    name: "Deposited",
+    type: "event",
+    inputs: [
+      { name: "goalId", type: "uint256", indexed: true },
+      { name: "contributor", type: "address", indexed: true },
+      { name: "amount", type: "uint256", indexed: false },
+    ],
+  },
+  {
     name: "GoalCreated",
     type: "event",
     inputs: [
