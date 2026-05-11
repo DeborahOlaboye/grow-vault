@@ -45,7 +45,7 @@ export default function GoalCard({
 
   if (depositOk) refetch();
 
-  if (!goal) return null;
+  if (!goal || goal[3] === 0n) return null;
 
   const saved = Number(formatUnits(goal[4], 18)).toFixed(2);
   const target = Number(formatUnits(goal[3], 18)).toFixed(2);
