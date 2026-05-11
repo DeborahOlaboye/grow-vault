@@ -123,7 +123,7 @@ export default function GoalCard({
             <button
               onClick={handleDeposit}
               disabled={!depositAmount}
-              className="px-4 py-2.5 bg-violet-600 text-white rounded-xl text-sm font-medium disabled:opacity-50"
+              className="px-4 py-2.5 bg-violet-600 text-white rounded-xl text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Deposit
             </button>
