@@ -16,7 +16,7 @@ export default function GoalsList() {
     args: address ? [address] : undefined,
   });
 
-  if (!goalIds?.length) {
+  if (!goalIds || goalIds.length === 0) {
     return (
       <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
         <p className="text-4xl mb-3">🎯</p>
