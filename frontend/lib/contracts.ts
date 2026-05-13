@@ -93,6 +93,13 @@ export const GROW_VAULT_ABI = [
     ],
   },
   {
+    name: "GoalCompleted",
+    type: "event",
+    inputs: [
+      { name: "goalId", type: "uint256", indexed: true },
+    ],
+  },
+  {
     name: "Withdrawn",
     type: "event",
     inputs: [
