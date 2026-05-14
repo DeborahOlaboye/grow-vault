@@ -49,7 +49,7 @@ export default function GoalCard({
 
   const saved = Number(formatUnits(goal[4], 18)).toFixed(2);
   const target = Number(formatUnits(goal[3], 18)).toFixed(2);
-  const pct = Math.min(Number(progress ?? 0), 100);
+  const pct = Number(progress ?? 0);
   const deadline = new Date(Number(goal[5]) * 1000).toLocaleDateString();
   const isOwner = goal[0].toLowerCase() === address?.toLowerCase();
   const lockLabel = goal[6] === 0 ? "Soft lock" : "Hard lock";
