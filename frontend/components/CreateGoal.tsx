@@ -78,8 +78,11 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
           onChange={(e) => setTarget(e.target.value)}
           placeholder="0.00"
           type="number"
+          min="0.01"
+          step="0.01"
           className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
+        <p className="text-xs text-gray-400 mt-1">1 cUSD ≈ 1 US Dollar · minimum 0.01 cUSD</p>
       </div>
 
       <div>
