@@ -48,14 +48,14 @@ export default function Stats() {
       icon: "💰",
       label: "cUSD in Vault",
       value: vaultBalance != null
-        ? `$${Number(formatUnits(vaultBalance, 18)).toFixed(2)}`
+        ? `$${Number(formatUnits(vaultBalance, 18)).toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
         : "—",
     },
     {
       icon: "⚖️",
       label: "Penalty Pool",
       value: penaltyPool != null
-        ? `$${Number(formatUnits(penaltyPool, 18)).toFixed(2)}`
+        ? `$${Number(formatUnits(penaltyPool, 18)).toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
         : "—",
     },
   ];
