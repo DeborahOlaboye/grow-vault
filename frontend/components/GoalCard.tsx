@@ -163,18 +163,23 @@ export default function GoalCard({
           )}
 
           {isOwner && (
-            <button
-              onClick={() =>
-                withdraw({
-                  address: contractAddress,
-                  abi: GROW_VAULT_ABI,
-                  functionName: "withdraw",
-                  args: [goalId],
-                })
-              }
-              className="w-full py-2 border border-gray-200 text-gray-500 rounded-xl text-sm"
-            >
-              Withdraw {goal[6] === 0 ? "(5% penalty if early)" : ""}
+            <>
+              {goal[6] === 1 && !goal[7] && daysLeft > 0 && (
+                <p className="text-xs text-amber-600 text-center py-1">Hard locked — available after deadline or goal completion</p>
+              )}
+              <button
+                onClick={() =>
+                  withdraw({
+                    address: contractAddress,
+                    abi: GROW_VAULT_ABI,
+                    functionName: "withdraw",
+                    args: [goalId],
+                  })
+                }
+                disabled={goal[6] === 1 && !goal[7] && daysLeft > 0}
+                className="w-full py-2 border border-gray-200 text-gray-500 rounded-xl text-sm disabled:opacity-40"
+              >
+                Withdraw {goal[6] === 0 ? "(5% penalty if early)" : ""}
             </button>
           )}
         </div>
