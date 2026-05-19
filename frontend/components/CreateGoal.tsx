@@ -59,10 +59,13 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Goal name</label>
+        <div className="flex justify-between mb-1">
+          <label className="text-xs font-medium text-gray-600">Goal name</label>
+          <span className={`text-xs ${name.length > 40 ? "text-amber-500" : "text-gray-400"}`}>{name.length}/50</span>
+        </div>
         <input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value.slice(0, 50))}
           placeholder="e.g. School fees, New phone..."
           className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
