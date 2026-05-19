@@ -36,8 +36,8 @@ export default function GoalCard({
     args: [goalId],
   });
 
-  const { writeContract: approve, data: approveTx } = useWriteContract();
-  const { writeContract: deposit, data: depositTx } = useWriteContract();
+  const { writeContract: approve, data: approveTx, isPending: approvePending } = useWriteContract();
+  const { writeContract: deposit, data: depositTx, isPending: depositPending } = useWriteContract();
   const { writeContract: withdraw } = useWriteContract();
   const { writeContract: claimMilestone } = useWriteContract();
 
@@ -129,10 +129,10 @@ export default function GoalCard({
             />
             <button
               onClick={handleDeposit}
-              disabled={!depositAmount}
+              disabled={!depositAmount || approvePending || depositPending}
               className="px-4 py-2.5 bg-violet-600 text-white rounded-xl text-sm font-medium disabled:opacity-50"
             >
-              Deposit
+              {approvePending ? "Approving..." : depositPending ? "Saving..." : "Deposit"}
             </button>
           </div>
 
