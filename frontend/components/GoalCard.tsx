@@ -36,6 +36,13 @@ export default function GoalCard({
     args: [goalId],
   });
 
+  const { data: contributorList } = useReadContract({
+    address: contractAddress,
+    abi: GROW_VAULT_ABI,
+    functionName: "getContributors",
+    args: [goalId],
+  });
+
   const { writeContract: approve, data: approveTx, isPending: approvePending } = useWriteContract();
   const { writeContract: deposit, data: depositTx, isPending: depositPending } = useWriteContract();
   const { writeContract: withdraw } = useWriteContract();
@@ -92,6 +99,9 @@ export default function GoalCard({
           <div className="text-right">
             <p className="font-bold text-violet-700 text-sm">{pct}%</p>
             {goal[7] && <span className="text-xs text-green-500">Completed!</span>}
+            {!goal[7] && contributorList && contributorList.length > 0 && (
+              <p className="text-xs text-gray-400">{contributorList.length} saver{contributorList.length !== 1 ? "s" : ""}</p>
+            )}
           </div>
         </div>
 
