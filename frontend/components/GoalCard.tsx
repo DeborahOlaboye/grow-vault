@@ -44,7 +44,7 @@ export default function GoalCard({
   const { isSuccess: approveOk } = useWaitForTransactionReceipt({ hash: approveTx });
   const { isSuccess: depositOk } = useWaitForTransactionReceipt({ hash: depositTx });
 
-  useEffect(() => { if (depositOk) refetch(); }, [depositOk]);
+  useEffect(() => { if (depositOk) { refetch(); setDepositAmount(""); } }, [depositOk]);
 
   useEffect(() => {
     if (approveOk && pendingAmount.current) {
