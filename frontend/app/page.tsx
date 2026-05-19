@@ -15,7 +15,7 @@ export default function Home() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-5 px-6">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-5 px-6 bg-gradient-to-b from-violet-50 to-white">
         <span className="text-5xl">🎯</span>
         <div className="text-center">
           <h1 className="text-2xl font-bold text-violet-700 mb-1">GrowVault</h1>
