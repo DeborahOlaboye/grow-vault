@@ -25,7 +25,7 @@ export default function Home() {
         {connectors.length > 0 ? (
           <button
             onClick={() => connect({ connector: connectors[0] })}
-            className="px-8 py-3 bg-violet-600 text-white rounded-xl font-semibold"
+            className="px-8 py-3 bg-violet-600 text-white rounded-xl font-semibold shadow-lg shadow-violet-200 active:scale-95 transition-transform"
           >
             Connect Wallet
           </button>
