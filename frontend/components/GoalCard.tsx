@@ -119,8 +119,10 @@ export default function GoalCard({
 
       {milestonesClaimed > 0 && (
         <div className="flex gap-1 px-4 pb-2">
-          {MILESTONES.slice(0, milestonesClaimed).map((m) => (
-            <span key={m} className="text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full">
+          {MILESTONES.slice(0, milestonesClaimed).map((m, i) => (
+            <span key={m} className={`text-xs px-2 py-0.5 rounded-full ${
+              i === 3 ? "bg-green-100 text-green-700" : i === 2 ? "bg-violet-200 text-violet-800" : "bg-violet-100 text-violet-700"
+            }`}>
               {m}
             </span>
           ))}
