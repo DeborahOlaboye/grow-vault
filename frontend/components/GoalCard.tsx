@@ -113,7 +113,7 @@ export default function GoalCard({
         </div>
         <div className="flex justify-between mt-1 text-xs text-gray-400">
           <span>{saved} cUSD saved</span>
-          <span>{target} cUSD goal</span>
+          <span>{goal[7] ? "Goal reached! 🎉" : `${target} cUSD goal`}</span>
         </div>
       </button>
 
