@@ -18,10 +18,11 @@ export default function GoalsList() {
 
   if (!goalIds || goalIds.length === 0) {
     return (
-      <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-        <p className="text-4xl mb-3">🎯</p>
-        <p className="font-semibold text-gray-700 mb-1">No goals yet</p>
-        <p className="text-xs text-gray-400">Create your first savings goal.</p>
+      <div className="bg-white rounded-2xl p-8 text-center shadow-sm space-y-2">
+        <p className="text-4xl">🎯</p>
+        <p className="font-semibold text-gray-700">No savings goals yet</p>
+        <p className="text-xs text-gray-400">Tap <strong>New Goal</strong> to start saving towards something that matters to you.</p>
+        <p className="text-xs text-gray-300 pt-1">Tip: friends and family can contribute to your goals too.</p>
       </div>
     );
   }
