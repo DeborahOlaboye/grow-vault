@@ -29,6 +29,7 @@ export default function GoalsList() {
 
   return (
     <div className="space-y-4">
+      <p className="text-xs text-gray-400 px-1">{goalIds.length} goal{goalIds.length !== 1 ? "s" : ""} · tap a card to deposit or withdraw</p>
       {goalIds.map((id) => (
         <GoalCard key={id.toString()} goalId={id} contractAddress={contractAddress} />
       ))}
