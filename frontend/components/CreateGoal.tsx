@@ -81,6 +81,19 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
 
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">Deadline</label>
+        <div className="flex gap-1.5 mb-2">
+          {([["1mo", 1], ["3mo", 3], ["6mo", 6]] as [string, number][]).map(([label, months]) => {
+            const d = new Date();
+            d.setMonth(d.getMonth() + months);
+            const val = d.toISOString().split("T")[0];
+            return (
+              <button key={label} type="button" onClick={() => setDeadline(val)}
+                className={`text-xs px-3 py-1 rounded-lg border transition-colors ${
+                  deadline === val ? "border-violet-500 bg-violet-50 text-violet-700" : "border-gray-200 text-gray-500"
+                }`}>{label}</button>
+            );
+          })}
+        </div>
         <input
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
