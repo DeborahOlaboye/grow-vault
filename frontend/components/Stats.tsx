@@ -60,8 +60,14 @@ export default function Stats() {
     },
   ];
 
+  const networkLabel = chainId === 42220 ? "Celo Mainnet" : "Alfajores Testnet";
+  const networkColor = chainId === 42220 ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700";
+
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${networkColor}`}>{networkLabel}</span>
+      </div>
       <div className="grid grid-cols-1 gap-3">
         {metrics.map(({ icon, label, value }) => (
           <div key={label} className="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4">
