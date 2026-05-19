@@ -69,6 +69,7 @@ export default function GoalCard({
   const lockLabel = goal[6] === 0 ? "Soft lock" : "Hard lock";
   const milestonesClaimed = Number(goal[10]);
   const nextMilestone = milestonesClaimed < 4 ? pct >= (milestonesClaimed + 1) * 25 : false;
+  const daysLeft = Math.max(0, Math.ceil((Number(goal[5]) * 1000 - Date.now()) / 86400000));
 
   function handleDeposit() {
     if (!depositAmount) return;
@@ -85,7 +86,7 @@ export default function GoalCard({
             <span className="text-2xl">{goal[2]}</span>
             <div>
               <p className="font-semibold text-gray-800 text-sm">{goal[1]}</p>
-              <p className="text-xs text-gray-400">{lockLabel} · Due {deadline}</p>
+              <p className="text-xs text-gray-400">{lockLabel} · {daysLeft > 0 ? `${daysLeft}d left` : "Deadline passed"}</p>
             </div>
           </div>
           <div className="text-right">
