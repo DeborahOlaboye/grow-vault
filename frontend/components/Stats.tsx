@@ -12,6 +12,7 @@ const ROADMAP = [
   { done: false, item: "Push notifications for milestone events" },
   { done: false, item: "Group goals — shared savings pools" },
   { done: false, item: "MiniPay listing" },
+  { done: false, item: "Recurring auto-save from wallet balance" },
 ];
 
 export default function Stats() {
