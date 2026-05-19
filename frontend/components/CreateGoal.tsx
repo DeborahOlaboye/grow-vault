@@ -135,7 +135,7 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
         disabled={!name || !target || !deadline || isPending}
         className="w-full py-3 bg-violet-600 text-white rounded-xl font-semibold disabled:opacity-50"
       >
-        {isPending ? "Creating..." : `Create ${emoji} Goal`}
+        {isPending ? "Creating goal..." : `Create ${emoji} ${name.trim() || "Goal"}`}
       </button>
     </div>
   );
