@@ -19,7 +19,8 @@ export default function Home() {
         <span className="text-5xl">🎯</span>
         <div className="text-center">
           <h1 className="text-2xl font-bold text-violet-700 mb-1">GrowVault</h1>
-          <p className="text-sm text-gray-400">Save towards your goals. Earn while you wait.</p>
+          <p className="text-sm text-gray-500">Save towards your goals. Earn while you wait.</p>
+          <p className="text-xs text-gray-400 mt-1">cUSD savings on Celo · built for MiniPay</p>
         </div>
         {connectors.length > 0 ? (
           <button
