@@ -84,6 +84,20 @@ export const GROW_VAULT_ABI = [
     outputs: [{ name: "", type: "address[]" }],
   },
   {
+    name: "totalGoals",
+    type: "function",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    name: "penaltyPool",
+    type: "function",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
     name: "Deposited",
     type: "event",
     inputs: [
