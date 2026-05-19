@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAccount, useChainId, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseUnits, formatUnits } from "viem";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI, ERC20_ABI, CUSD_ADDRESS } from "@/lib/contracts";
@@ -20,6 +20,7 @@ export default function GoalCard({
 
   const [depositAmount, setDepositAmount] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const pendingAmount = useRef<string>("");
 
   const { data: goal, refetch } = useReadContract({
     address: contractAddress,
@@ -43,7 +44,20 @@ export default function GoalCard({
   const { isSuccess: approveOk } = useWaitForTransactionReceipt({ hash: approveTx });
   const { isSuccess: depositOk } = useWaitForTransactionReceipt({ hash: depositTx });
 
-  if (depositOk) refetch();
+  useEffect(() => { if (depositOk) refetch(); }, [depositOk]);
+
+  useEffect(() => {
+    if (approveOk && pendingAmount.current) {
+      const amount = pendingAmount.current;
+      pendingAmount.current = "";
+      deposit({
+        address: contractAddress,
+        abi: GROW_VAULT_ABI,
+        functionName: "deposit",
+        args: [goalId, parseUnits(amount, 18)],
+      });
+    }
+  }, [approveOk]);
 
   if (!goal) return null;
 
@@ -58,17 +72,9 @@ export default function GoalCard({
 
   function handleDeposit() {
     if (!depositAmount) return;
+    pendingAmount.current = depositAmount;
     const parsed = parseUnits(depositAmount, 18);
     approve({ address: cUSD, abi: ERC20_ABI, functionName: "approve", args: [contractAddress, parsed] });
-  }
-
-  if (approveOk && depositAmount) {
-    deposit({
-      address: contractAddress,
-      abi: GROW_VAULT_ABI,
-      functionName: "deposit",
-      args: [goalId, parseUnits(depositAmount, 18)],
-    });
   }
 
   return (
