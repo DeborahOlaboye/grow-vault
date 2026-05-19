@@ -1,20 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 import GoalsList from "@/components/GoalsList";
 import CreateGoal from "@/components/CreateGoal";
+import Stats from "@/components/Stats";
 
-type Tab = "goals" | "new";
+type Tab = "goals" | "new" | "stats";
 
 export default function Home() {
   const { isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
   const [activeTab, setActiveTab] = useState<Tab>("goals");
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-400 text-sm">Opening in MiniPay...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-5 px-6">
+        <span className="text-5xl">🎯</span>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-violet-700 mb-1">GrowVault</h1>
+          <p className="text-sm text-gray-400">Save towards your goals. Earn while you wait.</p>
+        </div>
+        {connectors.length > 0 ? (
+          <button
+            onClick={() => connect({ connector: connectors[0] })}
+            className="px-8 py-3 bg-violet-600 text-white rounded-xl font-semibold"
+          >
+            Connect Wallet
+          </button>
+        ) : (
+          <p className="text-sm text-gray-400">Opening in MiniPay...</p>
+        )}
       </div>
     );
   }
@@ -27,7 +43,7 @@ export default function Home() {
       </header>
 
       <nav className="flex bg-white rounded-xl p-1 shadow-sm mb-5 gap-1">
-        {([["goals", "My Goals"], ["new", "New Goal"]] as [Tab, string][]).map(([id, label]) => (
+        {([["goals", "My Goals"], ["new", "New Goal"], ["stats", "Stats"]] as [Tab, string][]).map(([id, label]) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
@@ -42,6 +58,7 @@ export default function Home() {
 
       {activeTab === "goals" && <GoalsList />}
       {activeTab === "new" && <CreateGoal onCreated={() => setActiveTab("goals")} />}
+      {activeTab === "stats" && <Stats />}
     </div>
   );
 }
