@@ -21,9 +21,10 @@ contract GrowVault is Ownable, ReentrancyGuard {
         bool completed;
         bool withdrawn;
         uint256 createdAt;
-        uint8 milestonesClaimed;
+        uint8 milestonesClaimed; // 0-4 (25%, 50%, 75%, 100%)
     }
 
+    // 5% early withdrawal penalty on soft-lock goals
     uint256 public constant SOFT_LOCK_PENALTY_BPS = 500;
     uint256 public constant BPS_DENOMINATOR = 10000;
 
@@ -31,10 +32,12 @@ contract GrowVault is Ownable, ReentrancyGuard {
 
     mapping(uint256 => Goal) public goals;
     mapping(address => uint256[]) public userGoals;
+
+    // goalId => contributor => amount
     mapping(uint256 => mapping(address => uint256)) public contributions;
     mapping(uint256 => address[]) public contributors;
 
-    uint256 public penaltyPool;
+    uint256 public penaltyPool; // accumulated penalties
 
     event GoalCreated(uint256 indexed goalId, address indexed owner, string name, uint256 target, uint256 deadline);
     event Deposited(uint256 indexed goalId, address indexed contributor, uint256 amount);
@@ -75,7 +78,7 @@ contract GrowVault is Ownable, ReentrancyGuard {
         userGoals[msg.sender].push(goalId);
         emit GoalCreated(goalId, msg.sender, name, targetAmount, deadline);
     }
-}
+
     function deposit(uint256 goalId, uint256 amount) external nonReentrant {
         Goal storage goal = goals[goalId];
         require(!goal.withdrawn, "Goal closed");
@@ -97,7 +100,7 @@ contract GrowVault is Ownable, ReentrancyGuard {
 
         emit Deposited(goalId, msg.sender, amount);
     }
-}
+
     function withdraw(uint256 goalId) external nonReentrant {
         Goal storage goal = goals[goalId];
         require(goal.owner == msg.sender, "Not owner");
@@ -116,6 +119,7 @@ contract GrowVault is Ownable, ReentrancyGuard {
         uint256 amount = goal.savedAmount;
         uint256 penalty = 0;
 
+        // Apply penalty if soft-lock early withdrawal
         if (
             goal.lockMode == LockMode.SOFT &&
             !goal.completed &&
@@ -129,7 +133,7 @@ contract GrowVault is Ownable, ReentrancyGuard {
         require(cUSD.transfer(msg.sender, amount), "Transfer failed");
         emit Withdrawn(goalId, msg.sender, amount, penalty);
     }
-}
+
     function claimMilestone(uint256 goalId) external {
         Goal storage goal = goals[goalId];
         require(goal.owner == msg.sender, "Not owner");
@@ -145,11 +149,11 @@ contract GrowVault is Ownable, ReentrancyGuard {
         goal.milestonesClaimed = nextMilestone;
         emit MilestoneClaimed(goalId, nextMilestone);
     }
-}
+
     function getUserGoals(address user) external view returns (uint256[] memory) {
         return userGoals[user];
     }
-}
+
     function getContributors(uint256 goalId) external view returns (address[] memory) {
         return contributors[goalId];
     }
@@ -160,7 +164,11 @@ contract GrowVault is Ownable, ReentrancyGuard {
         pct = (goal.savedAmount * 100) / goal.targetAmount;
         if (pct > 100) pct = 100;
     }
-}
+
+    function totalGoals() external view returns (uint256) {
+        return _goalCounter;
+    }
+
     function withdrawPenalties() external onlyOwner {
         uint256 amount = penaltyPool;
         penaltyPool = 0;
