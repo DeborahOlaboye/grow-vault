@@ -27,9 +27,14 @@ export default function GoalsList() {
     );
   }
 
+  const activeCount = goalIds.filter(() => true).length;
+
   return (
     <div className="space-y-4">
-      <p className="text-xs text-gray-400 px-1">{goalIds.length} goal{goalIds.length !== 1 ? "s" : ""} · tap a card to deposit or withdraw</p>
+      <div className="flex items-center justify-between px-1">
+        <p className="text-xs text-gray-400">{activeCount} goal{activeCount !== 1 ? "s" : ""} · tap to deposit or withdraw</p>
+        <p className="text-xs text-violet-500 font-medium">Share a goal ID to let friends contribute</p>
+      </div>
       {goalIds.map((id) => (
         <GoalCard key={id.toString()} goalId={id} contractAddress={contractAddress} />
       ))}
