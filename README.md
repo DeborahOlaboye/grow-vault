@@ -45,6 +45,7 @@ npm run dev
 - [ ] Yield integration — earn while saving (Mento / Uniswap LP)
 - [ ] Push notifications for milestone events
 - [ ] Group goals — shared savings pools
+- [ ] Recurring auto-save from wallet balance
 - [ ] MiniPay listing
 
 ## Go-To-Market
