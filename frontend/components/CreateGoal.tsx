@@ -5,7 +5,7 @@ import { useChainId, useWriteContract, useWaitForTransactionReceipt } from "wagm
 import { parseUnits } from "viem";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI } from "@/lib/contracts";
 
-const EMOJIS = ["🎓", "🏠", "📱", "🚗", "💊", "💼", "✈️", "👶"];
+const EMOJIS = ["🎓", "🏠", "📱", "🚗", "💊", "💼", "✈️", "👶", "🌱", "💍", "🎵", "⚽"];
 
 export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
   const chainId = useChainId() as 42220 | 44787;
