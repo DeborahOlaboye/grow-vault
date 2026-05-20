@@ -40,7 +40,7 @@ export default function Home() {
     <div className="min-h-screen max-w-md mx-auto px-4 pb-8">
       <header className="pt-6 pb-4">
         <h1 className="text-2xl font-bold text-violet-700">GrowVault</h1>
-        <p className="text-xs text-gray-400">Save towards your goals. Earn while you wait.</p>
+        <p className="text-xs text-gray-400">Save in cUSD · Earn badges · Build habits</p>
       </header>
 
       <nav className="flex bg-white rounded-xl p-1 shadow-sm mb-5 gap-1">
