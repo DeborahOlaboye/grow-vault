@@ -88,7 +88,7 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">Deadline</label>
         <div className="flex gap-1.5 mb-2">
-          {([["1mo", 1], ["3mo", 3], ["6mo", 6]] as [string, number][]).map(([label, months]) => {
+          {([["1mo", 1], ["3mo", 3], ["6mo", 6], ["12mo", 12]] as [string, number][]).map(([label, months]) => {
             const d = new Date();
             d.setMonth(d.getMonth() + months);
             const val = d.toISOString().split("T")[0];
