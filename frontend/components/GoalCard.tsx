@@ -78,6 +78,10 @@ export default function GoalCard({
   const nextMilestone = milestonesClaimed < 4 ? pct >= (milestonesClaimed + 1) * 25 : false;
   const daysLeft = Math.max(0, Math.ceil((Number(goal[5]) * 1000 - Date.now()) / 86400000));
 
+  function copyGoalId() {
+    navigator.clipboard.writeText(goalId.toString());
+  }
+
   function handleDeposit() {
     if (!depositAmount) return;
     pendingAmount.current = depositAmount;
@@ -96,8 +100,11 @@ export default function GoalCard({
               <p className="text-xs text-gray-400">{lockLabel} · {daysLeft > 0 ? `${daysLeft}d left` : "Deadline passed"}</p>
             </div>
           </div>
-          <div className="text-right">
-            <p className="font-bold text-violet-700 text-sm">{pct}%</p>
+          <div className="text-right flex flex-col items-end gap-0.5">
+            <div className="flex items-center gap-1.5">
+              <p className="font-bold text-violet-700 text-sm">{pct}%</p>
+              <button onClick={(e) => { e.stopPropagation(); copyGoalId(); }} title="Copy goal ID to share" className="text-gray-300 hover:text-violet-400 transition-colors text-xs">⎘</button>
+            </div>
             {goal[7] && <span className="text-xs text-green-500">Completed!</span>}
             {!goal[7] && contributorList && contributorList.length > 0 && (
               <p className="text-xs text-gray-400">{contributorList.length} saver{contributorList.length !== 1 ? "s" : ""}</p>
