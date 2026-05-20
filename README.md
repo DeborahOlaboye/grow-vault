@@ -50,3 +50,11 @@ npm run dev
 ## Go-To-Market
 
 Target users are MiniPay users in sub-Saharan Africa saving toward specific short-term goals (school fees, devices, healthcare). Initial distribution via Celo/MiniPay community channels, with referral mechanics through shareable goal links ("help me reach my goal").
+
+## Contributing
+
+PRs welcome. Run `cd frontend && npm run lint` before pushing. Contract changes must include a matching ABI update in `frontend/lib/contracts.ts`.
+
+## License
+
+MIT
