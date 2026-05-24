@@ -25,6 +25,12 @@ const features = [
   },
 ];
 
+const steps = [
+  { n: "1", title: "Create a goal", body: "Pick an emoji, name it, set your cUSD target and a deadline." },
+  { n: "2", title: "Deposit cUSD", body: "Fund your goal anytime. Friends can chip in too." },
+  { n: "3", title: "Watch it grow", body: "Track progress, collect badges, and withdraw when you're ready." },
+];
+
 export default function LandingPage() {
   const { connect, connectors } = useConnect();
   return (
