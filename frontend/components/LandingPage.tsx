@@ -11,6 +11,16 @@ export default function LandingPage() {
         </div>
         <span className="text-xs text-violet-400 font-medium bg-violet-100 px-2.5 py-1 rounded-full">Celo · MiniPay</span>
       </nav>
+
+      {/* Hero */}
+      <section className="flex flex-col items-center text-center px-6 pt-10 pb-12">
+        <div className="relative mb-6">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-xl shadow-violet-200">
+            <span className="text-5xl">🎯</span>
+          </div>
+          <span className="absolute -bottom-1 -right-1 text-2xl">✨</span>
+        </div>
+      </section>
     </div>
   );
 }
