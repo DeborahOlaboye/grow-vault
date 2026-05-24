@@ -81,6 +81,22 @@ export default function LandingPage() {
         )}
       </section>
 
+      {/* Stats strip */}
+      <section className="mx-5 mb-10">
+        <div className="bg-white rounded-2xl shadow-sm border border-violet-100 grid grid-cols-3 divide-x divide-violet-100 py-4">
+          {[
+            { value: "cUSD", label: "Savings token" },
+            { value: "4", label: "Milestones" },
+            { value: "0%", label: "Platform fee" },
+          ].map(({ value, label }) => (
+            <div key={label} className="flex flex-col items-center gap-0.5 px-2">
+              <span className="text-lg font-extrabold text-violet-700">{value}</span>
+              <span className="text-[10px] text-gray-400 text-center leading-tight">{label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Features */}
       <section className="px-5 mb-10">
         <h2 className="text-base font-bold text-gray-800 mb-4">Why GrowVault?</h2>
@@ -144,22 +160,6 @@ export default function LandingPage() {
           <span className="font-semibold text-violet-400">cUSD</span> · Open source
         </p>
       </footer>
-
-      {/* Stats strip */}
-      <section className="mx-5 mb-10">
-        <div className="bg-white rounded-2xl shadow-sm border border-violet-100 grid grid-cols-3 divide-x divide-violet-100 py-4">
-          {[
-            { value: "cUSD", label: "Savings token" },
-            { value: "4", label: "Milestones" },
-            { value: "0%", label: "Platform fee" },
-          ].map(({ value, label }) => (
-            <div key={label} className="flex flex-col items-center gap-0.5 px-2">
-              <span className="text-lg font-extrabold text-violet-700">{value}</span>
-              <span className="text-[10px] text-gray-400 text-center leading-tight">{label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
