@@ -4,7 +4,7 @@ export const CUSD_ADDRESS = {
 } as const;
 
 export const GROW_VAULT_ADDRESS = {
-  42220: "" as `0x${string}`,
+  42220: "0x2be5780ad75a71f39040f044cbf92e745731de44" as `0x${string}`,
   44787: "" as `0x${string}`,
 } as const;
 
