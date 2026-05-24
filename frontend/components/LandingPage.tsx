@@ -2,6 +2,29 @@
 
 import { useConnect } from "wagmi";
 
+const features = [
+  {
+    icon: "🎯",
+    title: "Goal-Based Saving",
+    desc: "Name your goal, set a target, pick a deadline. Your money works toward something real.",
+  },
+  {
+    icon: "🔒",
+    title: "Soft & Hard Lock",
+    desc: "Soft lock keeps you accountable with a 5% early-exit fee. Hard lock holds firm until you hit your goal.",
+  },
+  {
+    icon: "👥",
+    title: "Social Contributions",
+    desc: "Share your goal ID so friends and family can deposit directly — turn personal goals into community wins.",
+  },
+  {
+    icon: "🏅",
+    title: "Milestone Badges",
+    desc: "Claim on-chain badges at 25%, 50%, 75%, and 100% — proof of your progress, forever on Celo.",
+  },
+];
+
 export default function LandingPage() {
   const { connect, connectors } = useConnect();
   return (
