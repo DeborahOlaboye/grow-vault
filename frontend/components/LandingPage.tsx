@@ -116,6 +116,26 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Bottom CTA */}
+      <section className="px-5 mb-10">
+        <div className="bg-gradient-to-br from-violet-600 to-purple-600 rounded-3xl p-6 text-center shadow-xl shadow-violet-200">
+          <p className="text-white font-bold text-lg mb-1">Ready to start saving?</p>
+          <p className="text-violet-200 text-xs mb-5">
+            School fees, a new phone, a business deposit — commit on-chain and make it real.
+          </p>
+          {connectors.length > 0 ? (
+            <button
+              onClick={() => connect({ connector: connectors[0] })}
+              className="w-full py-3.5 bg-white text-violet-700 rounded-xl font-bold text-sm active:scale-95 transition-transform shadow"
+            >
+              Get Started →
+            </button>
+          ) : (
+            <p className="text-violet-300 text-sm font-medium">Opening in MiniPay…</p>
+          )}
+        </div>
+      </section>
+
       {/* Stats strip */}
       <section className="mx-5 mb-10">
         <div className="bg-white rounded-2xl shadow-sm border border-violet-100 grid grid-cols-3 divide-x divide-violet-100 py-4">
