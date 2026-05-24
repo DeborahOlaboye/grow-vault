@@ -136,6 +136,15 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Footer */}
+      <footer className="mt-auto px-5 pb-8 text-center">
+        <p className="text-[11px] text-gray-400">
+          Built on{" "}
+          <span className="font-semibold text-violet-400">Celo</span> · Savings held in{" "}
+          <span className="font-semibold text-violet-400">cUSD</span> · Open source
+        </p>
+      </footer>
+
       {/* Stats strip */}
       <section className="mx-5 mb-10">
         <div className="bg-white rounded-2xl shadow-sm border border-violet-100 grid grid-cols-3 divide-x divide-violet-100 py-4">
