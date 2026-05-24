@@ -5,9 +5,10 @@ import { useAccount } from "wagmi";
 import GoalsList from "@/components/GoalsList";
 import CreateGoal from "@/components/CreateGoal";
 import Stats from "@/components/Stats";
+import AIAdvisor from "@/components/AIAdvisor";
 import LandingPage from "@/components/LandingPage";
 
-type Tab = "goals" | "new" | "stats";
+type Tab = "goals" | "new" | "stats" | "ai";
 
 export default function Home() {
   const { isConnected } = useAccount();
@@ -25,7 +26,7 @@ export default function Home() {
       </header>
 
       <nav className="flex bg-white rounded-xl p-1 shadow-sm mb-5 gap-1">
-        {([["goals", "My Goals"], ["new", "New Goal"], ["stats", "Stats"]] as [Tab, string][]).map(([id, label]) => (
+        {([["goals", "My Goals"], ["new", "New Goal"], ["stats", "Stats"], ["ai", "🤖 AI"]] as [Tab, string][]).map(([id, label]) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
@@ -41,6 +42,7 @@ export default function Home() {
       {activeTab === "goals" && <GoalsList />}
       {activeTab === "new" && <CreateGoal onCreated={() => setActiveTab("goals")} />}
       {activeTab === "stats" && <Stats />}
+      {activeTab === "ai" && <AIAdvisor />}
     </div>
   );
 }
