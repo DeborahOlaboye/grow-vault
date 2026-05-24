@@ -1,7 +1,7 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = new Anthropic();
+const client = new Groq();
 
 const SYSTEM_PROMPT = `You are GrowVault AI, a friendly savings advisor for MiniPay users on Celo.
 You help users in emerging markets (sub-Saharan Africa) plan and achieve their cUSD savings goals on-chain.
@@ -24,19 +24,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
+  const response = await client.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
     max_tokens: 512,
-    system: [
-      {
-        type: "text",
-        text: SYSTEM_PROMPT,
-        cache_control: { type: "ephemeral" },
-      },
-    ],
-    messages,
+    messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
   });
 
-  const text = response.content[0].type === "text" ? response.content[0].text : "";
+  const text = response.choices[0]?.message?.content ?? "";
   return NextResponse.json({ text });
 }

@@ -1,0 +1,18 @@
+{
+  "type": "Agent",
+  "name": "GrowVault AI Savings Advisor",
+  "description": "An AI-powered savings advisor for MiniPay users on Celo. Users describe their savings goal in plain language and receive a personalised deposit schedule, lock mode recommendation (soft or hard), and milestone breakdown — all anchored to on-chain cUSD savings.",
+  "image": "https://grow-vault-taum.vercel.app/icon.png",
+  "endpoints": [
+    {
+      "type": "a2a",
+      "url": "https://grow-vault-taum.vercel.app/.well-known/agent.json"
+    },
+    {
+      "type": "wallet",
+      "address": "0x2be5780ad75a71f39040f044cbf92e745731de44",
+      "chainId": 42220
+    }
+  ],
+  "supportedTrust": ["reputation"]
+}
