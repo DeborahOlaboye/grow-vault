@@ -189,7 +189,8 @@ export default function GoalCard({
                 className="w-full py-2 border border-gray-200 text-gray-500 rounded-xl text-sm disabled:opacity-40"
               >
                 Withdraw {goal[6] === 0 ? "(5% penalty if early)" : ""}
-            </button>
+              </button>
+            </>
           )}
         </div>
       )}
