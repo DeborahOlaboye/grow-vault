@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Autonomous GrowVault savings agent on Celo — boosts goals approaching milestones",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
-    "start": "ts-node index.ts",
-    "dev": "ts-node-dev --respawn index.ts"
+    "start": "tsx index.ts",
+    "dev": "tsx watch index.ts",
+    "register:8004": "tsx src/register-8004.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -14,8 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

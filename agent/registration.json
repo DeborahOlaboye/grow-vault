@@ -1,0 +1,19 @@
+{
+  "type": "Agent",
+  "name": "GrowVault AI Savings Advisor",
+  "description": "Autonomous AI agent on Celo that monitors on-chain savings goals every 5 minutes. Uses Groq/Llama AI to identify goals within 2 cUSD of a milestone (25/50/75/100%), then autonomously approves cUSD and executes on-chain deposit boosts — no human action required. Built for MiniPay users in sub-Saharan Africa saving toward real goals.",
+  "image": "https://grow-vault-taum.vercel.app/icon.png",
+  "endpoints": [
+    {
+      "type": "a2a",
+      "url": "https://grow-vault-taum.vercel.app/.well-known/agent.json"
+    },
+    {
+      "type": "wallet",
+      "address": "0xd9a109888E3e3cD7dfFe2A686151CC4931e1C21c",
+      "chainId": 42220
+    }
+  ],
+  "supportedTrust": ["reputation"],
+  "agentWallet": "0xd9a109888E3e3cD7dfFe2A686151CC4931e1C21c"
+}
