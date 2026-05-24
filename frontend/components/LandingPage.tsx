@@ -20,6 +20,20 @@ export default function LandingPage() {
           </div>
           <span className="absolute -bottom-1 -right-1 text-2xl">✨</span>
         </div>
+
+        <h1 className="text-3xl font-extrabold text-gray-900 leading-tight mb-3">
+          Save with{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-500">
+            purpose
+          </span>
+          .<br />
+          Earn while you wait.
+        </h1>
+
+        <p className="text-gray-500 text-sm max-w-xs leading-relaxed mb-2">
+          Goal-based cUSD savings on Celo. Set a target, lock your funds, collect milestone badges.
+        </p>
+        <p className="text-xs text-violet-400 font-medium mb-8">Built for MiniPay · Powered by cUSD</p>
       </section>
     </div>
   );
