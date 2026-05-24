@@ -98,6 +98,24 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* How it works */}
+      <section className="px-5 mb-12">
+        <h2 className="text-base font-bold text-gray-800 mb-4">How it works</h2>
+        <div className="flex flex-col gap-3">
+          {steps.map(({ n, title, body }) => (
+            <div key={n} className="flex items-start gap-4 bg-white rounded-2xl p-4 border border-violet-100 shadow-sm">
+              <span className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 text-white text-sm font-bold flex-shrink-0 flex items-center justify-center shadow-md shadow-violet-200">
+                {n}
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-gray-800">{title}</p>
+                <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Stats strip */}
       <section className="mx-5 mb-10">
         <div className="bg-white rounded-2xl shadow-sm border border-violet-100 grid grid-cols-3 divide-x divide-violet-100 py-4">
