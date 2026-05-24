@@ -1,6 +1,9 @@
 "use client";
 
+import { useConnect } from "wagmi";
+
 export default function LandingPage() {
+  const { connect, connectors } = useConnect();
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 via-white to-violet-50 flex flex-col">
       {/* Nav */}
@@ -34,6 +37,19 @@ export default function LandingPage() {
           Goal-based cUSD savings on Celo. Set a target, lock your funds, collect milestone badges.
         </p>
         <p className="text-xs text-violet-400 font-medium mb-8">Built for MiniPay · Powered by cUSD</p>
+
+        {connectors.length > 0 ? (
+          <button
+            onClick={() => connect({ connector: connectors[0] })}
+            className="w-full max-w-xs py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-2xl font-bold text-base shadow-lg shadow-violet-300 active:scale-95 transition-transform"
+          >
+            Connect Wallet →
+          </button>
+        ) : (
+          <div className="w-full max-w-xs py-4 bg-violet-100 text-violet-400 rounded-2xl font-semibold text-sm text-center">
+            Opening in MiniPay…
+          </div>
+        )}
       </section>
     </div>
   );
