@@ -75,6 +75,23 @@ export default function LandingPage() {
         )}
       </section>
 
+      {/* Features */}
+      <section className="px-5 mb-10">
+        <h2 className="text-base font-bold text-gray-800 mb-4">Why GrowVault?</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {features.map(({ icon, title, desc }) => (
+            <div
+              key={title}
+              className="bg-white rounded-2xl p-4 border border-violet-100 shadow-sm flex flex-col gap-2"
+            >
+              <span className="text-2xl">{icon}</span>
+              <p className="text-xs font-semibold text-gray-800 leading-snug">{title}</p>
+              <p className="text-[11px] text-gray-500 leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Stats strip */}
       <section className="mx-5 mb-10">
         <div className="bg-white rounded-2xl shadow-sm border border-violet-100 grid grid-cols-3 divide-x divide-violet-100 py-4">
