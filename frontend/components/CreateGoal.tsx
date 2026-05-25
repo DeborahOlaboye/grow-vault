@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useChainId, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useQueryClient } from "@tanstack/react-query";
 import { parseUnits } from "viem";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI } from "@/lib/contracts";
 
@@ -17,13 +18,16 @@ export default function CreateGoal({ onCreated }: { onCreated: () => void }) {
   const [deadline, setDeadline] = useState("");
   const [lockMode, setLockMode] = useState<0 | 1>(0); // 0=SOFT, 1=HARD
 
+  const queryClient = useQueryClient();
   const { writeContract, data: tx, isPending } = useWriteContract();
   const { isSuccess } = useWaitForTransactionReceipt({ hash: tx });
 
-  if (isSuccess) {
-    onCreated();
-    return null;
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries();
+      onCreated();
+    }
+  }, [isSuccess]);
 
   function handleCreate() {
     if (!name || !target || !deadline || !contractAddress) return;

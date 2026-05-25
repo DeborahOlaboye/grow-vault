@@ -68,8 +68,16 @@ export default function GoalCard({
 
   if (!goal) return null;
 
-  const saved = Number(formatUnits(goal[4], 18)).toFixed(2);
-  const target = Number(formatUnits(goal[3], 18)).toFixed(2);
+  function fmtCUSD(raw: bigint) {
+    const n = Number(formatUnits(raw, 18));
+    if (n === 0) return "0.00";
+    if (n < 0.001) return n.toFixed(7).replace(/0+$/, "");
+    if (n < 0.01) return n.toFixed(4);
+    return n.toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  const saved = fmtCUSD(goal[4]);
+  const target = fmtCUSD(goal[3]);
   const pct = Number(progress ?? 0);
   const deadline = new Date(Number(goal[5]) * 1000).toLocaleDateString();
   const isOwner = goal[0].toLowerCase() === address?.toLowerCase();
