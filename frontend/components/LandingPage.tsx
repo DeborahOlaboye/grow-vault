@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useConnect } from "wagmi";
 
 const features = [
@@ -33,6 +34,15 @@ const steps = [
 
 export default function LandingPage() {
   const { connect, connectors } = useConnect();
+
+  // Auto-connect when running inside MiniPay
+  useEffect(() => {
+    const w = window as typeof window & { ethereum?: { isMiniPay?: boolean } };
+    if (w.ethereum?.isMiniPay && connectors.length > 0) {
+      connect({ connector: connectors[0] });
+    }
+  }, [connectors, connect]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 via-white to-violet-50 flex flex-col">
       {/* Nav */}
