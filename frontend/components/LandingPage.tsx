@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useConnect } from "wagmi";
+import { injected } from "wagmi/connectors";
 
 const features = [
   {
@@ -33,15 +34,16 @@ const steps = [
 ];
 
 export default function LandingPage() {
-  const { connect, connectors } = useConnect();
+  const { connect } = useConnect();
+  const [isMiniPay, setIsMiniPay] = useState(false);
 
-  // Auto-connect when running inside MiniPay
   useEffect(() => {
     const w = window as typeof window & { ethereum?: { isMiniPay?: boolean } };
-    if (w.ethereum?.isMiniPay && connectors.length > 0) {
-      connect({ connector: connectors[0] });
+    if (w.ethereum?.isMiniPay) {
+      setIsMiniPay(true);
+      connect({ connector: injected({ target: "metaMask" }) });
     }
-  }, [connectors, connect]);
+  }, [connect]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 via-white to-violet-50 flex flex-col">
@@ -77,17 +79,17 @@ export default function LandingPage() {
         </p>
         <p className="text-xs text-violet-400 font-medium mb-8">Built for MiniPay · Powered by cUSD</p>
 
-        {connectors.length > 0 ? (
+        {isMiniPay ? (
+          <div className="w-full max-w-xs py-4 bg-violet-100 text-violet-400 rounded-2xl font-semibold text-sm text-center">
+            Opening in MiniPay…
+          </div>
+        ) : (
           <button
-            onClick={() => connect({ connector: connectors[0] })}
+            onClick={() => connect({ connector: injected({ target: "metaMask" }) })}
             className="w-full max-w-xs py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-2xl font-bold text-base shadow-lg shadow-violet-300 active:scale-95 transition-transform"
           >
             Connect Wallet →
           </button>
-        ) : (
-          <div className="w-full max-w-xs py-4 bg-violet-100 text-violet-400 rounded-2xl font-semibold text-sm text-center">
-            Opening in MiniPay…
-          </div>
         )}
       </section>
 
@@ -149,15 +151,13 @@ export default function LandingPage() {
           <p className="text-violet-200 text-xs mb-5">
             School fees, a new phone, a business deposit — commit on-chain and make it real.
           </p>
-          {connectors.length > 0 ? (
+          {!isMiniPay && (
             <button
-              onClick={() => connect({ connector: connectors[0] })}
+              onClick={() => connect({ connector: injected({ target: "metaMask" }) })}
               className="w-full py-3.5 bg-white text-violet-700 rounded-xl font-bold text-sm active:scale-95 transition-transform shadow"
             >
               Get Started →
             </button>
-          ) : (
-            <p className="text-violet-300 text-sm font-medium">Opening in MiniPay…</p>
           )}
         </div>
       </section>
