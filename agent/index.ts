@@ -48,5 +48,12 @@ async function run() {
   console.log(`\n[Agent] Cycle complete. Next run in 5 minutes.`);
 }
 
-run().catch(console.error);
-setInterval(() => run().catch(console.error), INTERVAL_MS);
+const once = process.argv.includes("--once");
+
+run()
+  .catch(console.error)
+  .finally(() => { if (once) process.exit(0); });
+
+if (!once) {
+  setInterval(() => run().catch(console.error), INTERVAL_MS);
+}
