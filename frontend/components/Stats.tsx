@@ -1,7 +1,8 @@
 "use client";
 
-import { useChainId, useReadContract } from "wagmi";
-import { formatUnits } from "viem";
+import { useChainId, useReadContract, usePublicClient } from "wagmi";
+import { formatUnits, parseAbiItem } from "viem";
+import { useEffect, useState } from "react";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI, ERC20_ABI, CUSD_ADDRESS } from "@/lib/contracts";
 
 const ROADMAP = [
@@ -15,16 +16,34 @@ const ROADMAP = [
   { done: false, item: "Recurring auto-save from wallet balance" },
 ];
 
+const GOAL_CREATED_EVENT = parseAbiItem(
+  "event GoalCreated(uint256 indexed goalId, address indexed owner, string name, uint256 target, uint256 deadline)"
+);
+const DEPLOY_BLOCK = BigInt(67270684);
+
+function formatCUSD(raw: bigint) {
+  const n = Number(formatUnits(raw, 18));
+  if (n === 0) return "$0.00";
+  if (n < 0.01) return `$${n.toFixed(4)}`;
+  return `$${n.toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
 export default function Stats() {
   const chainId = useChainId() as 42220 | 44787;
   const contractAddress = GROW_VAULT_ADDRESS[chainId];
   const cUSD = CUSD_ADDRESS[chainId] as `0x${string}`;
+  const publicClient = usePublicClient();
+  const [goalCount, setGoalCount] = useState<number | null>(null);
 
-  const { data: totalGoals } = useReadContract({
-    address: contractAddress,
-    abi: GROW_VAULT_ABI,
-    functionName: "totalGoals",
-  });
+  useEffect(() => {
+    if (!publicClient || !contractAddress) return;
+    publicClient.getLogs({
+      address: contractAddress,
+      event: GOAL_CREATED_EVENT,
+      fromBlock: DEPLOY_BLOCK,
+      toBlock: "latest",
+    }).then((logs) => setGoalCount(logs.length)).catch(() => setGoalCount(null));
+  }, [publicClient, contractAddress]);
 
   const { data: penaltyPool } = useReadContract({
     address: contractAddress,
@@ -43,21 +62,17 @@ export default function Stats() {
     {
       icon: "🎯",
       label: "Goals Created",
-      value: totalGoals != null ? totalGoals.toString() : "—",
+      value: goalCount != null ? goalCount.toString() : "—",
     },
     {
       icon: "💰",
       label: "cUSD in Vault",
-      value: vaultBalance != null
-        ? `$${Number(formatUnits(vaultBalance, 18)).toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-        : "—",
+      value: vaultBalance != null ? formatCUSD(vaultBalance) : "—",
     },
     {
       icon: "⚖️",
       label: "Penalty Pool",
-      value: penaltyPool != null
-        ? `$${Number(formatUnits(penaltyPool, 18)).toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-        : "—",
+      value: penaltyPool != null ? formatCUSD(penaltyPool) : "—",
     },
   ];
 
