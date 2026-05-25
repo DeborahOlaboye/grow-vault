@@ -1,8 +1,6 @@
 import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = new Groq();
-
 const SYSTEM_PROMPT = `You are GrowVault AI, a friendly savings advisor for MiniPay users on Celo.
 You help users in emerging markets (sub-Saharan Africa) plan and achieve their cUSD savings goals on-chain.
 
@@ -18,6 +16,7 @@ Do not use markdown headers. Use short paragraphs.
 Never mention other blockchains, tokens, or financial products outside of cUSD and Celo.`;
 
 export async function POST(req: NextRequest) {
+  const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
   const { messages } = await req.json();
 
   if (!messages || !Array.isArray(messages)) {
