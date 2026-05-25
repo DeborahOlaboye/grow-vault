@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAccount, useChainId, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useQueryClient } from "@tanstack/react-query";
 import { parseUnits, formatUnits } from "viem";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI, ERC20_ABI, CUSD_ADDRESS } from "@/lib/contracts";
 
@@ -17,6 +18,7 @@ export default function GoalCard({
   const { address } = useAccount();
   const chainId = useChainId() as 42220 | 44787;
   const cUSD = CUSD_ADDRESS[chainId] as `0x${string}`;
+  const queryClient = useQueryClient();
 
   const [depositAmount, setDepositAmount] = useState("");
   const [expanded, setExpanded] = useState(false);
@@ -51,7 +53,12 @@ export default function GoalCard({
   const { isSuccess: approveOk } = useWaitForTransactionReceipt({ hash: approveTx });
   const { isSuccess: depositOk } = useWaitForTransactionReceipt({ hash: depositTx });
 
-  useEffect(() => { if (depositOk) { refetch(); setDepositAmount(""); } }, [depositOk]);
+  useEffect(() => {
+    if (depositOk) {
+      queryClient.invalidateQueries();
+      setDepositAmount("");
+    }
+  }, [depositOk]);
 
   useEffect(() => {
     if (approveOk && pendingAmount.current) {
