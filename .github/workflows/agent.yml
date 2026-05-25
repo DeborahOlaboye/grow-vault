@@ -2,7 +2,7 @@ name: GrowVault AI Agent
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # runs every 30 minutes
+    - cron: "0 * * * *"  # runs every hour
   workflow_dispatch:          # allows manual trigger from GitHub UI
 
 jobs:
