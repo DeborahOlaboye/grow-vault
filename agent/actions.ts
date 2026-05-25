@@ -1,42 +1,57 @@
 import { formatUnits } from "viem";
-import { walletClient, publicClient } from "./wallet";
-import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI, CUSD_ADDRESS, ERC20_ABI } from "./abi";
 import { Decision } from "./brain";
+import { GoalState } from "./monitor";
 
-export async function executeDecisions(decisions: Decision[]): Promise<void> {
-  const boosts = decisions.filter((d) => d.shouldBoost && d.boostAmount > 0n);
+export async function postRecommendations(
+  decisions: Decision[],
+  goals: GoalState[]
+): Promise<void> {
+  const toPost = decisions
+    .filter((d) => d.shouldBoost && d.boostAmount > 0n)
+    .map((d) => {
+      const goal = goals.find((g) => g.id === d.goalId);
+      return {
+        goalId: d.goalId,
+        amountNeeded: formatUnits(d.boostAmount, 18),
+        nextMilestonePct: goal?.nextMilestonePct ?? 25,
+        reason: d.reason,
+      };
+    });
 
-  if (boosts.length === 0) {
-    console.log("[Agent] No boosts needed this cycle.");
+  if (toPost.length === 0) {
+    console.log("[Agent] No tips to post this cycle.");
     return;
   }
 
-  for (const d of boosts) {
-    console.log(`\n[Agent] → Boosting goal #${d.goalId}: ${formatUnits(d.boostAmount, 18)} cUSD`);
-    console.log(`[Agent]   Reason: ${d.reason}`);
+  const frontendUrl = process.env.FRONTEND_URL ?? "https://grow-vault-taum.vercel.app";
+  const secret = process.env.AGENT_SECRET;
 
-    try {
-      // Step 1: approve cUSD spend
-      const approveTx = await walletClient.writeContract({
-        address: CUSD_ADDRESS,
-        abi: ERC20_ABI,
-        functionName: "approve",
-        args: [GROW_VAULT_ADDRESS, d.boostAmount],
-      });
-      await publicClient.waitForTransactionReceipt({ hash: approveTx });
-      console.log(`[Agent]   Approved cUSD — tx: ${approveTx}`);
+  if (!secret) {
+    console.warn("[Agent] AGENT_SECRET not set — skipping tip post.");
+    return;
+  }
 
-      // Step 2: deposit to goal
-      const depositTx = await walletClient.writeContract({
-        address: GROW_VAULT_ADDRESS,
-        abi: GROW_VAULT_ABI,
-        functionName: "deposit",
-        args: [BigInt(d.goalId), d.boostAmount],
-      });
-      await publicClient.waitForTransactionReceipt({ hash: depositTx });
-      console.log(`[Agent]   Deposit complete — tx: ${depositTx}`);
-    } catch (err) {
-      console.error(`[Agent]   Failed to boost goal #${d.goalId}:`, err);
+  try {
+    const res = await fetch(`${frontendUrl}/api/agent-signal`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-agent-secret": secret,
+      },
+      body: JSON.stringify({ goals: toPost }),
+    });
+
+    if (res.ok) {
+      console.log(`[Agent] Posted ${toPost.length} tip(s) to app:`);
+      toPost.forEach((t) =>
+        console.log(
+          `  Goal #${t.goalId} — deposit ${t.amountNeeded} cUSD to reach ${t.nextMilestonePct}% milestone`
+        )
+      );
+    } else {
+      console.warn("[Agent] Failed to post tips:", await res.text());
     }
+  } catch (err) {
+    console.error("[Agent] Error posting tips:", err);
   }
 }

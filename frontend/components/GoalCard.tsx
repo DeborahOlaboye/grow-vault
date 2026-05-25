@@ -6,6 +6,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { parseUnits, formatUnits } from "viem";
 import { GROW_VAULT_ADDRESS, GROW_VAULT_ABI, ERC20_ABI, CUSD_ADDRESS } from "@/lib/contracts";
 
+type AgentTip = {
+  goalId: number;
+  amountNeeded: string;
+  nextMilestonePct: number;
+  reason: string;
+};
+
 const MILESTONES = ["25%", "50%", "75%", "100%"];
 
 export default function GoalCard({
@@ -22,7 +29,15 @@ export default function GoalCard({
 
   const [depositAmount, setDepositAmount] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const [agentTip, setAgentTip] = useState<AgentTip | null>(null);
   const pendingAmount = useRef<string>("");
+
+  useEffect(() => {
+    fetch(`/api/agent-signal?goalId=${goalId}`)
+      .then((r) => r.json())
+      .then((data) => setAgentTip(data))
+      .catch(() => {});
+  }, [goalId]);
 
   const { data: goal, refetch } = useReadContract({
     address: contractAddress,
@@ -153,6 +168,18 @@ export default function GoalCard({
 
       {expanded && !goal[8] && (
         <div className="border-t border-gray-100 p-4 space-y-3">
+          {agentTip && (
+            <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 space-y-1.5">
+              <p className="text-xs font-semibold text-violet-700">🤖 AI Tip</p>
+              <p className="text-xs text-violet-600">{agentTip.reason}</p>
+              <button
+                onClick={() => { setDepositAmount(agentTip.amountNeeded); }}
+                className="text-xs font-medium text-violet-700 underline underline-offset-2"
+              >
+                Deposit {agentTip.amountNeeded} cUSD to reach {agentTip.nextMilestonePct}% milestone →
+              </button>
+            </div>
+          )}
           <div className="flex gap-2">
             <input
               value={depositAmount}

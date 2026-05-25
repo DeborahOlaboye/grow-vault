@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { monitorGoals } from "./monitor";
 import { analyze } from "./brain";
-import { executeDecisions } from "./actions";
+import { postRecommendations } from "./actions";
 import { agentAddress, publicClient } from "./wallet";
 import { CUSD_ADDRESS, ERC20_ABI } from "./abi";
 import { formatUnits } from "viem";
@@ -44,7 +44,7 @@ async function run() {
   const boostCount = decisions.filter((d) => d.shouldBoost).length;
   console.log(`[Agent] AI decided to boost ${boostCount} goal(s)`);
 
-  await executeDecisions(decisions);
+  await postRecommendations(decisions, goals);
   console.log(`\n[Agent] Cycle complete. Next run in 5 minutes.`);
 }
 
